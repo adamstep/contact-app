@@ -1,0 +1,22 @@
+{% extends 'hv/layout.xml' %}
+
+{% block content %}
+  <list>
+    {% for contact in contacts %}
+      <item key="{{ contact.id }}" style="item">
+        <behavior trigger="press" action="push" href="/contacts/{{ contact.id }}" />
+        {% if contact.first %}
+          <text>{{ contact.first }} {{ contact.last }}</text>
+        {% endif %}
+
+        {% if contact.phone %}
+          <text>{{ contact.phone }}</text>
+        {% endif %}
+
+        {% if contact.email %}
+          <text>{{ contact.email }}</text>
+        {% endif %}
+      </item>
+    {% endfor %}
+  </list>
+{% endblock %}

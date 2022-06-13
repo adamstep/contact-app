@@ -1,0 +1,28 @@
+{% extends 'hv/layout.xml' %}
+
+{% block header %}
+  <text style="header-title">
+    <behavior trigger="press" action="back" href="#" />
+    Back
+  </text>
+
+  <text style="header-title">
+    <behavior trigger="press" action="push" href="/contacts/{{contact.id}}/edit" />
+    Edit
+  </text>
+
+{% endblock %}
+
+{% block content %}
+<view style="details">
+  <text style="h1">{{ contact.first }} {{ contact.last }}</text>
+
+  <view>
+      <text>Phone: {{contact.phone}}</text>
+      <text>Email: {{contact.email}}</text>
+  </view>
+
+
+
+</view>
+{% endblock %}

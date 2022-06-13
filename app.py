@@ -14,6 +14,8 @@ app = Flask(__name__)
 
 app.secret_key = b'hypermedia rocks'
 
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+
 
 @app.route("/")
 def index():
@@ -30,7 +32,7 @@ def contacts():
             return render_template("rows.html", contacts=contacts_set, page=page)
     else:
         contacts_set = Contact.all(page)
-    return render_template("index.html", contacts=contacts_set, page=page)
+    return render_template("hv/index.html", contacts=contacts_set, page=page)
 
 
 @app.route("/contacts/count")
@@ -58,7 +60,7 @@ def contacts_new():
 @app.route("/contacts/<contact_id>")
 def contacts_view(contact_id=0):
     contact = Contact.find(contact_id)
-    return render_template("show.html", contact=contact)
+    return render_template("hv/show.xml", contact=contact)
 
 
 @app.route("/contacts/<contact_id>/edit", methods=["GET"])
