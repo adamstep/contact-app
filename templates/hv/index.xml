@@ -1,6 +1,7 @@
 {% extends 'hv/layout.xml' %}
 
 {% block content %}
+  <behavior trigger="on-event" event-name="contact-updated" action="reload" />
   <list>
     {% for contact in contacts %}
       <item key="{{ contact.id }}" style="item">

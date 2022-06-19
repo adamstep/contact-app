@@ -1,0 +1,15 @@
+<view xmlns="https://hyperview.org/hyperview" style="details">
+  {% if updated %}
+    <behavior trigger="load" action="dispatch-event" event-name="contact-updated" />
+    <behavior trigger="load" action="dispatch-event" event-name="end-edit" />
+    {% for message in get_flashed_messages() %}
+      <behavior trigger="load" action="show-toast" toast-message="{{ message }}" />
+    {% endfor %}
+  {% endif %}
+
+  <text style="h1">{{ contact.first }} {{ contact.last }}</text>
+  <view>
+    <text>Phone: {{contact.phone}}</text>
+    <text>Email: {{contact.email}}</text>
+  </view>
+</view>

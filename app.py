@@ -16,6 +16,14 @@ app.secret_key = b'hypermedia rocks'
 
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
+HYPERVIEW_MIME_TYPES = ['application/vnd.hyperview+xml', 'application/vnd.hyperview_fragment+xml']
+
+def is_hyperview_request(req):
+    for t in HYPERVIEW_MIME_TYPES:
+        if t in req.headers.get('Accept', ''):
+            return True
+    return False
+
 
 @app.route("/")
 def index():
@@ -60,13 +68,15 @@ def contacts_new():
 @app.route("/contacts/<contact_id>")
 def contacts_view(contact_id=0):
     contact = Contact.find(contact_id)
-    return render_template("hv/show.xml", contact=contact)
+    template = 'hv/show.xml' if is_hyperview_request(request) else 'show.html'
+    return render_template(template, contact=contact)
 
 
 @app.route("/contacts/<contact_id>/edit", methods=["GET"])
 def contacts_edit_get(contact_id=0):
     contact = Contact.find(contact_id)
-    return render_template("edit.html", contact=contact)
+    template = 'hv/edit.xml' if is_hyperview_request(request) else 'edit.html'
+    return render_template(template, contact=contact)
 
 
 @app.route("/contacts/<contact_id>/edit", methods=["POST"])
@@ -75,9 +85,11 @@ def contacts_edit_post(contact_id=0):
     c.update(request.form['first_name'], request.form['last_name'], request.form['phone'], request.form['email'])
     if c.save():
         flash("Updated Contact!")
-        return redirect("/contacts/" + str(contact_id))
+        #return redirect("/contacts/" + str(contact_id))
+        return render_template('hv/_details.xml', contact=c, updated=True)
     else:
-        return render_template("edit.html", contact=c)
+        template = 'hv/edit.xml' if is_hyperview_request(request) else 'edit.html'
+        return render_template(template, contact=c)
 
 
 @app.route("/contacts/<contact_id>/email", methods=["GET"])
@@ -107,7 +119,11 @@ def contacts_delete_all():
         contact.delete()
     flash("Deleted Contacts!")
     contacts_set = Contact.all(1)
-    return render_template("index.html", contacts=contacts_set)
+
+    if is_hyperview_request(request):
+        return render_template('hv/_deleted.xml')
+    else:
+        return render_template("index.html", contacts=contacts_set)
 
 
 if __name__ == "__main__":

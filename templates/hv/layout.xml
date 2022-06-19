@@ -11,6 +11,9 @@
       <style id="details" paddingHorizontal="24" paddingTop="16"></style>
 
       <style id="item" borderBottomColor="#ccc" borderBottomWidth="1" paddingLeft="24" paddingRight="24" paddingVertical="16"></style>
+
+      <style id="button" paddingHorizontal="24" paddingVertical="16" backgroundColor="blue" borderRadius="8" alignItems="center" />
+      <style id="button-label" color="white" />
     </styles>
 
     <body style="body" safe-area="true">

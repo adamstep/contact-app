@@ -6,23 +6,16 @@
     Back
   </text>
 
-  <text style="header-title">
-    <behavior trigger="press" action="push" href="/contacts/{{contact.id}}/edit" />
+  <text style="header-title" id="edit-button">
+    <behavior trigger="press" action="replace-inner" target="content" href="/contacts/{{contact.id}}/edit" />
     Edit
   </text>
-
+  <behavior trigger="on-event" event-name="start-edit" action="hide" target="edit-button" />
+  <behavior trigger="on-event" event-name="end-edit" action="show" target="edit-button" />
 {% endblock %}
 
 {% block content %}
-<view style="details">
-  <text style="h1">{{ contact.first }} {{ contact.last }}</text>
-
-  <view>
-      <text>Phone: {{contact.phone}}</text>
-      <text>Email: {{contact.email}}</text>
-  </view>
-
-
-
+<view id="content">
+  {% include 'hv/_details.xml' %}
 </view>
 {% endblock %}

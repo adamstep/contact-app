@@ -1,0 +1,33 @@
+<view xmlns="https://hyperview.org/hyperview" style="details">
+  <behavior trigger="load" action="dispatch-event" event-name="start-edit" />
+  <form>
+    <text-field name="first_name" placeholder="First name" value="{{ contact.first }}" />
+    <text-field name="last_name" placeholder="Last name" value="{{ contact.last }}" />
+    <text-field name="email" placeholder="Email" value="{{ contact.email }}" />
+    <text-field name="phone" placeholder="Phone number" value="{{ contact.phone }}" />
+
+    <view style="button">
+      <behavior trigger="press" action="replace-inner" target="content" href="/contacts/{{contact.id}}/edit" verb="post" />
+      <text style="button-label">Save</text>
+    </view>
+
+    <view>
+
+      <behavior
+        xmlns:alert="https://hyperview.org/hyperview-alert"
+        trigger="press"
+        action="alert"
+        alert:title="Confirm delete"
+        alert:message="Are you sure you want to delete {{ contact.first }}?"
+      >
+        <alert:option alert:label="Confirm">
+          <behavior trigger="press" action="replace-inner" target="content" href="/contacts/{{contact.id}}/delete" verb="post" />
+        </alert:option>
+        <alert:option alert:label="Cancel" />
+      </behavior>
+
+      <text>Delete</text>
+    </view>
+
+  </form>
+</view>
