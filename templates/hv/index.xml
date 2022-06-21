@@ -1,23 +1,26 @@
 {% extends 'hv/layout.xml' %}
 
+{% block header %}
+  <text style="header-title">
+    Contacts
+  </text>
+
+  <text style="header-title" id="edit-button">
+    <behavior trigger="press" action="push" href="/contacts/new" />
+    Add
+  </text>
+
+{% endblock %}
+
 {% block content %}
   <behavior trigger="on-event" event-name="contact-updated" action="reload" />
-  <list>
-    {% for contact in contacts %}
-      <item key="{{ contact.id }}" style="item">
-        <behavior trigger="press" action="push" href="/contacts/{{ contact.id }}" />
-        {% if contact.first %}
-          <text>{{ contact.first }} {{ contact.last }}</text>
-        {% endif %}
-
-        {% if contact.phone %}
-          <text>{{ contact.phone }}</text>
-        {% endif %}
-
-        {% if contact.email %}
-          <text>{{ contact.email }}</text>
-        {% endif %}
-      </item>
-    {% endfor %}
+  <list 
+    id="contacts-list"
+    trigger="refresh"
+    action="replace-inner"
+    target="contacts-list"
+    href="/contacts?items_only=true"
+  >
+    {% include 'hv/_items.xml' %}
   </list>
 {% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'hv/layout.xml' %}
+
+{% block header %}
+  <text style="header-title">
+    <behavior trigger="press" action="back" href="#" />
+    Back
+  </text>
+{% endblock %}
+
+{% block content %}
+<view id="content">
+  {% include 'hv/_new_form.xml' %}
+</view>
+{% endblock %}

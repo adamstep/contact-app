@@ -16,6 +16,10 @@
 
 {% block content %}
 <view id="content">
-  {% include 'hv/_details.xml' %}
+  {% if contact.id %}
+    {% include 'hv/_details.xml' %}
+  {% else %}
+    {% include 'hv/_new_form.xml' %}
+  {% endif %}
 </view>
 {% endblock %}

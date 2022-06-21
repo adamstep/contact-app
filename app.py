@@ -19,10 +19,14 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 HYPERVIEW_MIME_TYPES = ['application/vnd.hyperview+xml', 'application/vnd.hyperview_fragment+xml']
 
 def is_hyperview_request(req):
+    return True
     for t in HYPERVIEW_MIME_TYPES:
         if t in req.headers.get('Accept', ''):
             return True
     return False
+
+def is_hyperview_fragment_request(req):
+    return 'application/vnd.hyperview_fragment+xml' in req.headers.get('Accept', '')
 
 
 @app.route("/")
@@ -34,13 +38,21 @@ def index():
 def contacts():
     search = request.args.get("q")
     page = int(request.args.get("page", 1))
+    items_only = request.args.get("items_only") == "true"
     if search:
         contacts_set = Contact.search(search)
         if request.headers.get('HX-Trigger') == 'search':
             return render_template("rows.html", contacts=contacts_set, page=page)
     else:
-        contacts_set = Contact.all(page)
-    return render_template("hv/index.html", contacts=contacts_set, page=page)
+        contacts_set = Contact.all()
+
+    template = 'index.html'
+    if is_hyperview_request(request):
+        if items_only:
+            template = 'hv/_items.xml'
+        else:
+            template = 'hv/index.xml'
+    return render_template(template, contacts=contacts_set)
 
 
 @app.route("/contacts/count")
@@ -49,9 +61,11 @@ def contacts_count():
     return "(" + str(count) + " total Contacts)"
 
 
+
 @app.route("/contacts/new", methods=['GET'])
 def contacts_new_get():
-    return render_template("new.html", contact=Contact())
+    template = "hv/show.xml" if is_hyperview_request(request) else "new.html"
+    return render_template(template, contact=Contact())
 
 
 @app.route("/contacts/new", methods=['POST'])
@@ -60,15 +74,21 @@ def contacts_new():
                 request.form['email'])
     if c.save():
         flash("Created New Contact!")
-        return redirect("/contacts")
+        #return redirect("/contacts")
+        return render_template('hv/_details.xml', contact=c, updated=True)
     else:
-        return render_template("new.html", contact=c)
+        template = 'hv/_new_form.xml' if is_hyperview_request(request) else 'new.html'
+        return render_template(template, contact=c)
 
 
 @app.route("/contacts/<contact_id>")
 def contacts_view(contact_id=0):
     contact = Contact.find(contact_id)
-    template = 'hv/show.xml' if is_hyperview_request(request) else 'show.html'
+    template = 'show.html'
+    if is_hyperview_fragment_request(request):
+        template = 'hv/_details.xml'
+    elif is_hyperview_request(request):
+        template = 'hv/show.xml'
     return render_template(template, contact=contact)
 
 
