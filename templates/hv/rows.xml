@@ -1,37 +1,16 @@
 <items xmlns="https://hyperview.org/hyperview">
   {% for contact in contacts %}
-    <item key="{{ contact.id }}">
-      <swipe:row xmlns:swipe="https://manning.com/hyperview/swipeable">
-        <swipe:main>
-          <view style="contact-item">
-            <behavior trigger="press" action="push" href="/contacts/{{ contact.id }}" />
-            <text style="contact-item-label">
-              {% if contact.first %}
-                {{ contact.first }} {{ contact.last }}
-              {% elif contact.phone %}
-                {{ contact.phone }}
-              {% elif contact.email %}
-                {{ contact.email }}
-              {% endif %}
-            </text>
-          </view>
-        </swipe:main>
-
-        <swipe:button>
-          <view>
-            <behavior trigger="press" action="push" href="/contacts/{{ contact.id }}/edit" />
-            <text>Edit</text>
-          </view>
-        </swipe:button>
-
-        <swipe:button>
-          <view>
-            <behavior trigger="press" action="append" href="/contacts/{{ contact.id }}/delete" verb="post" />
-            <text>Delete</text>
-          </view>
-        </swipe:button>
-      </swipe:row>
-
+    <item key="{{ contact.id }}" style="contact-item">
+      <behavior trigger="press" action="push" href="/contacts/{{ contact.id }}" />
+      <text style="contact-item-label">
+        {% if contact.first %}
+          {{ contact.first }} {{ contact.last }}
+        {% elif contact.phone %}
+          {{ contact.phone }}
+        {% elif contact.email %}
+          {{ contact.email }}
+        {% endif %}
+      </text>
     </item>
   {% endfor %}
   {% if contacts|length %}
