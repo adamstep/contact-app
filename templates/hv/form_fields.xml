@@ -1,0 +1,25 @@
+<view xmlns="https://hyperview.org/hyperview" style="edit-group">
+  {% if saved %}
+    <behavior trigger="load" once="true" action="dispatch-event" event-name="contact-updated" />
+    <behavior trigger="load" once="true" action="reload" href="/contacts/{{contact.id}}" />
+  {% endif %}
+
+  <view style="edit-field">
+    <text-field name="first_name" placeholder="First name" value="{{ contact.first|default('', true) }}" />
+  </view>
+
+  <view style="edit-field">
+    <text-field name="last_name" placeholder="Last name" value="{{ contact.last|default('', true) }}" />
+  </view>
+
+  <view style="edit-field">
+    <text-field name="email" placeholder="Email" value="{{ contact.email|default('', true) }}" />
+    {% if contact.errors.email %}
+      <text style="edit-field-error">{{ contact.errors.email }}</text>
+    {% endif %}
+  </view>
+
+  <view style="edit-field">
+    <text-field name="phone" placeholder="Phone number" value="{{ contact.phone|default('', true) }}" mask="(999) 999-9999" />
+  </view>
+</view>
