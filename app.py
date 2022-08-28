@@ -1,5 +1,9 @@
 from flask import (
+<<<<<<< HEAD
     Flask, redirect, render_template, request, flash, jsonify, send_file
+=======
+    Flask, redirect, render_template, request, flash, make_response
+>>>>>>> 9d2834b (implement HV app with minimal Flask changes)
 )
 from contacts_model import Contact, Archiver
 import time
@@ -14,6 +18,12 @@ app = Flask(__name__)
 
 app.secret_key = b'hypermedia rocks'
 
+def render_to_response(template_name, *args, **kwargs):
+    content = render_template(template_name, *args, **kwargs)
+    response = make_response(content)
+    response.headers['Content-Type'] = 'application/xml'
+    return response
+
 
 @app.route("/")
 def index():
@@ -24,13 +34,14 @@ def index():
 def contacts():
     search = request.args.get("q")
     page = int(request.args.get("page", 1))
-    if search is not None:
+    rows_only = request.args.get("rows_only") == "true"
+    if search:
         contacts_set = Contact.search(search)
-        if request.headers.get('HX-Trigger') == 'search':
-            return render_template("rows.html", contacts=contacts_set)
     else:
-        contacts_set = Contact.all()
-    return render_template("index.html", contacts=contacts_set, archiver=Archiver.get())
+        contacts_set = Contact.all(page)
+
+    template_name = "hv/rows.xml" if rows_only else "hv/index.xml"
+    return render_to_response(template_name, contacts=contacts_set, page=page)
 
 
 @app.route("/contacts/archive", methods=["POST"])
@@ -59,6 +70,7 @@ def reset_archive():
     return render_template("archive_ui.html", archiver=archiver)
 
 
+
 @app.route("/contacts/count")
 def contacts_count():
     count = Contact.count()
@@ -67,7 +79,7 @@ def contacts_count():
 
 @app.route("/contacts/new", methods=['GET'])
 def contacts_new_get():
-    return render_template("new.html", contact=Contact())
+    return render_to_response("hv/new.xml", contact=Contact())
 
 
 @app.route("/contacts/new", methods=['POST'])
@@ -76,21 +88,21 @@ def contacts_new():
                 request.form['email'])
     if c.save():
         flash("Created New Contact!")
-        return redirect("/contacts")
+        return render_to_response("hv/form_fields.xml", contact=c, saved=True)
     else:
-        return render_template("new.html", contact=c)
+        return render_to_response("hv/form_fields.xml", contact=c)
 
 
 @app.route("/contacts/<contact_id>")
 def contacts_view(contact_id=0):
     contact = Contact.find(contact_id)
-    return render_template("show.html", contact=contact)
+    return render_to_response("hv/show.xml", contact=contact)
 
 
 @app.route("/contacts/<contact_id>/edit", methods=["GET"])
 def contacts_edit_get(contact_id=0):
     contact = Contact.find(contact_id)
-    return render_template("edit.html", contact=contact)
+    return render_to_response("hv/edit.xml", contact=contact)
 
 
 @app.route("/contacts/<contact_id>/edit", methods=["POST"])
@@ -99,9 +111,9 @@ def contacts_edit_post(contact_id=0):
     c.update(request.form['first_name'], request.form['last_name'], request.form['phone'], request.form['email'])
     if c.save():
         flash("Updated Contact!")
-        return redirect("/contacts/" + str(contact_id))
+        return render_to_response("hv/form_fields.xml", contact=c, saved=True)
     else:
-        return render_template("edit.html", contact=c)
+        return render_to_response("hv/form_fields.xml", contact=c)
 
 
 @app.route("/contacts/<contact_id>/email", methods=["GET"])
@@ -113,14 +125,19 @@ def contacts_email_get(contact_id=0):
 
 
 @app.route("/contacts/<contact_id>", methods=["DELETE"])
+@app.route("/contacts/<contact_id>/delete", methods=["POST"])
 def contacts_delete(contact_id=0):
     contact = Contact.find(contact_id)
     contact.delete()
+<<<<<<< HEAD
     if request.headers.get('HX-Trigger') == 'delete-btn':
         flash("Deleted Contact!")
         return redirect("/contacts", 303)
     else:
         return ""
+=======
+    return render_to_response("hv/deleted.xml")
+>>>>>>> 9d2834b (implement HV app with minimal Flask changes)
 
 
 @app.route("/contacts/", methods=["DELETE"])
@@ -131,7 +148,7 @@ def contacts_delete_all():
         contact.delete()
     flash("Deleted Contacts!")
     contacts_set = Contact.all(1)
-    return render_template("index.html", contacts=contacts_set)
+    return render_to_response("hv/index.xml", contacts=contacts_set)
 
 
 # ===========================================================
