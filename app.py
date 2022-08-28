@@ -123,10 +123,11 @@ def contacts_email_get(contact_id=0):
 @app.route("/contacts/<contact_id>", methods=["DELETE"])
 @app.route("/contacts/<contact_id>/delete", methods=["POST"])
 def contacts_delete(contact_id=0):
+    is_inline = request.args.get("inline")
     contact = Contact.find(contact_id)
     contact.delete()
     flash("Deleted Contact!")
-    return render_to_response("hv/deleted.xml")
+    return render_to_response("hv/deleted.xml", is_inline=is_inline)
 
 
 @app.route("/contacts/", methods=["DELETE"])

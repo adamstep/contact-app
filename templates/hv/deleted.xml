@@ -1,5 +1,7 @@
 <view xmlns="https://hyperview.org/hyperview">
   {% include "hv/toasts.xml" %}
   <behavior trigger="load" action="dispatch-event" event-name="contact-updated" />
-  <behavior trigger="load" action="back" />
+  {% if not is_inline %}
+    <behavior trigger="load" action="back" />
+  {% endif %}
 </view>
