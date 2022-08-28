@@ -65,6 +65,8 @@ def reset_archive():
     archiver.reset()
     return render_template("archive_ui.html", archiver=archiver)
 
+=======
+>>>>>>> 9d2834b (implement HV app with minimal Flask changes)
 
 
 @app.route("/contacts/count")
@@ -181,6 +183,8 @@ def json_contacts_delete(contact_id=0):
     contact = Contact.find(contact_id)
     contact.delete()
     return jsonify({"success": True})
+=======
+>>>>>>> 9d2834b (implement HV app with minimal Flask changes)
 
 
 if __name__ == "__main__":
