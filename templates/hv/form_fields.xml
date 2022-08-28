@@ -1,5 +1,6 @@
 <view xmlns="https://hyperview.org/hyperview" style="edit-group">
   {% if saved %}
+    {% include "hv/toasts.xml" %}
     <behavior trigger="load" once="true" action="dispatch-event" event-name="contact-updated" />
     <behavior trigger="load" once="true" action="reload" href="/contacts/{{contact.id}}" />
   {% endif %}
