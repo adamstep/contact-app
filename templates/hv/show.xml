@@ -1,0 +1,25 @@
+{% extends 'hv/layout.xml' %}
+
+{% block header %}
+  <text style="header-title">
+    <behavior trigger="press" action="back" href="#" />
+    Back
+  </text>
+
+  <text style="header-title" id="edit-button">
+    <behavior trigger="press" action="replace-inner" target="content" href="/contacts/{{contact.id}}/edit" />
+    Edit
+  </text>
+  <behavior trigger="on-event" event-name="start-edit" action="hide" target="edit-button" />
+  <behavior trigger="on-event" event-name="end-edit" action="show" target="edit-button" />
+{% endblock %}
+
+{% block content %}
+<view id="content">
+  {% if contact.id %}
+    {% include 'hv/_details.xml' %}
+  {% else %}
+    {% include 'hv/_new_form.xml' %}
+  {% endif %}
+</view>
+{% endblock %}

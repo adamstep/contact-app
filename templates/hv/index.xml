@@ -1,0 +1,26 @@
+{% extends 'hv/layout.xml' %}
+
+{% block header %}
+  <text style="header-title">
+    Contacts
+  </text>
+
+  <text style="header-title" id="edit-button">
+    <behavior trigger="press" action="push" href="/contacts/new" />
+    Add
+  </text>
+
+{% endblock %}
+
+{% block content %}
+  <behavior trigger="on-event" event-name="contact-updated" action="reload" />
+  <list 
+    id="contacts-list"
+    trigger="refresh"
+    action="replace-inner"
+    target="contacts-list"
+    href="/contacts?items_only=true"
+  >
+    {% include 'hv/_items.xml' %}
+  </list>
+{% endblock %}

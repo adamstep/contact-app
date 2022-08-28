@@ -1,0 +1,7 @@
+<view xmlns="https://hyperview.org/hyperview" style="details">
+  <behavior trigger="load" action="dispatch-event" event-name="contact-updated" />
+  <behavior trigger="load" action="back" />
+  {% for message in get_flashed_messages() %}
+    <behavior trigger="load" action="show-toast" toast-message="{{ message }}" />
+  {% endfor %}
+</view>

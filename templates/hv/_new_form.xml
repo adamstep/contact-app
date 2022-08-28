@@ -1,0 +1,14 @@
+<view xmlns="https://hyperview.org/hyperview">
+  <behavior trigger="load" action="dispatch-event" event-name="start-edit" />
+  <form>
+    {% include 'hv/_form_fields.xml' %}
+
+    <view style="edit-group">
+      <view style="button">
+        <behavior trigger="press" action="replace-inner" target="content" href="/contacts/new" verb="post" />
+        <text style="button-label">Add Contact</text>
+      </view>
+    </view>
+
+  </form>
+</view>

@@ -1,8 +1,8 @@
 from flask import (
     Flask, redirect, render_template, request, flash
 )
-
 from contacts_model import Contact
+import time
 
 Contact.load_db()
 
@@ -14,6 +14,20 @@ app = Flask(__name__)
 
 app.secret_key = b'hypermedia rocks'
 
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+
+HYPERVIEW_MIME_TYPES = ['application/vnd.hyperview+xml', 'application/vnd.hyperview_fragment+xml']
+
+def is_hyperview_request(req):
+    return True
+    for t in HYPERVIEW_MIME_TYPES:
+        if t in req.headers.get('Accept', ''):
+            return True
+    return False
+
+def is_hyperview_fragment_request(req):
+    return 'application/vnd.hyperview_fragment+xml' in req.headers.get('Accept', '')
+
 
 @app.route("/")
 def index():
@@ -23,16 +37,35 @@ def index():
 @app.route("/contacts")
 def contacts():
     search = request.args.get("q")
+    page = int(request.args.get("page", 1))
+    items_only = request.args.get("items_only") == "true"
     if search:
         contacts_set = Contact.search(search)
+        if request.headers.get('HX-Trigger') == 'search':
+            return render_template("rows.html", contacts=contacts_set, page=page)
     else:
         contacts_set = Contact.all()
-    return render_template("index.html", contacts=contacts_set)
+
+    template = 'index.html'
+    if is_hyperview_request(request):
+        if items_only:
+            template = 'hv/_items.xml'
+        else:
+            template = 'hv/index.xml'
+    return render_template(template, contacts=contacts_set)
+
+
+@app.route("/contacts/count")
+def contacts_count():
+    count = Contact.count()
+    return "(" + str(count) + " total Contacts)"
+
 
 
 @app.route("/contacts/new", methods=['GET'])
 def contacts_new_get():
-    return render_template("new.html", contact=Contact())
+    template = "hv/show.xml" if is_hyperview_request(request) else "new.html"
+    return render_template(template, contact=Contact())
 
 
 @app.route("/contacts/new", methods=['POST'])
@@ -41,21 +74,29 @@ def contacts_new():
                 request.form['email'])
     if c.save():
         flash("Created New Contact!")
-        return redirect("/contacts")
+        #return redirect("/contacts")
+        return render_template('hv/_details.xml', contact=c, updated=True)
     else:
-        return render_template("new.html", contact=c)
+        template = 'hv/_new_form.xml' if is_hyperview_request(request) else 'new.html'
+        return render_template(template, contact=c)
 
 
 @app.route("/contacts/<contact_id>")
 def contacts_view(contact_id=0):
     contact = Contact.find(contact_id)
-    return render_template("show.html", contact=contact)
+    template = 'show.html'
+    if is_hyperview_fragment_request(request):
+        template = 'hv/_details.xml'
+    elif is_hyperview_request(request):
+        template = 'hv/show.xml'
+    return render_template(template, contact=contact)
 
 
 @app.route("/contacts/<contact_id>/edit", methods=["GET"])
 def contacts_edit_get(contact_id=0):
     contact = Contact.find(contact_id)
-    return render_template("edit.html", contact=contact)
+    template = 'hv/edit.xml' if is_hyperview_request(request) else 'edit.html'
+    return render_template(template, contact=contact)
 
 
 @app.route("/contacts/<contact_id>/edit", methods=["POST"])
@@ -64,17 +105,45 @@ def contacts_edit_post(contact_id=0):
     c.update(request.form['first_name'], request.form['last_name'], request.form['phone'], request.form['email'])
     if c.save():
         flash("Updated Contact!")
-        return redirect("/contacts/" + str(contact_id))
+        #return redirect("/contacts/" + str(contact_id))
+        return render_template('hv/_details.xml', contact=c, updated=True)
     else:
-        return render_template("edit.html", contact=c)
+        template = 'hv/edit.xml' if is_hyperview_request(request) else 'edit.html'
+        return render_template(template, contact=c)
 
 
-@app.route("/contacts/<contact_id>/delete", methods=["POST"])
+@app.route("/contacts/<contact_id>/email", methods=["GET"])
+def contacts_email_get(contact_id=0):
+    c = Contact.find(contact_id)
+    c.email = request.args.get('email')
+    c.validate()
+    return c.errors.get('email') or ""
+
+
+@app.route("/contacts/<contact_id>", methods=["DELETE"])
 def contacts_delete(contact_id=0):
     contact = Contact.find(contact_id)
     contact.delete()
-    flash("Deleted Contact!")
-    return redirect("/contacts")
+    if request.headers.get('HX-Trigger') == 'delete-brn':
+        flash("Deleted Contact!")
+        return redirect("/contacts", 303)
+    else:
+        return ""
+
+
+@app.route("/contacts/", methods=["DELETE"])
+def contacts_delete_all():
+    contact_ids = list(map(int, request.form.getlist("selected_contact_ids")))
+    for contact_id in contact_ids:
+        contact = Contact.find(contact_id)
+        contact.delete()
+    flash("Deleted Contacts!")
+    contacts_set = Contact.all(1)
+
+    if is_hyperview_request(request):
+        return render_template('hv/_deleted.xml')
+    else:
+        return render_template("index.html", contacts=contacts_set)
 
 
 if __name__ == "__main__":

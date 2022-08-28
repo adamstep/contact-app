@@ -11,9 +11,19 @@
 
 table {
     width: 100%;
+    margin-bottom: 12px;
 }
 
 .error {
     display: inline-block;
     color: darkred;
+}
+
+tr.htmx-swapping {
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
+
+td {
+    vertical-align: middle;
 }

@@ -1,0 +1,20 @@
+<view style="edit-group">
+  <view style="edit-field">
+    <text-field name="first_name" placeholder="First name" value="{{ contact.first|default('', true) }}" auto-focus="true" />
+  </view>
+
+  <view style="edit-field">
+    <text-field name="last_name" placeholder="Last name" value="{{ contact.last|default('', true) }}" />
+  </view>
+
+  <view style="edit-field">
+    <text-field name="email" placeholder="Email" value="{{ contact.email|default('', true) }}" />
+    {% if contact.errors.email %}
+      <text style="edit-field-error">{{ contact.errors.email }}</text>
+    {% endif %}
+  </view>
+
+  <view style="edit-field">
+    <text-field name="phone" placeholder="Phone number" value="{{ contact.phone|default('', true) }}" mask="(999) 999-9999" />
+  </view>
+</view>
