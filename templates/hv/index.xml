@@ -28,13 +28,13 @@
         verb="get"
       />
     </text-field>
+    <list id="contacts-list"
+      trigger="refresh"
+      action="replace-inner"
+      target="contacts-list"
+      href="/contacts?rows_only=true"
+    >
+      {% include 'hv/rows.xml' %}
+    </list>
   </form>
-  <list id="contacts-list"
-    trigger="refresh"
-    action="replace-inner"
-    target="contacts-list"
-    href="/contacts?rows_only=true"
-  >
-    {% include 'hv/rows.xml' %}
-  </list>
 {% endblock %}
