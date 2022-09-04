@@ -1,9 +1,5 @@
 from flask import (
-<<<<<<< HEAD
-    Flask, redirect, render_template, request, flash, jsonify, send_file
-=======
-    Flask, redirect, render_template, request, flash, make_response
->>>>>>> 9d2834b (implement HV app with minimal Flask changes)
+    Flask, redirect, render_template, request, flash, jsonify, send_file, make_response
 )
 from contacts_model import Contact, Archiver
 import time
@@ -129,15 +125,8 @@ def contacts_email_get(contact_id=0):
 def contacts_delete(contact_id=0):
     contact = Contact.find(contact_id)
     contact.delete()
-<<<<<<< HEAD
-    if request.headers.get('HX-Trigger') == 'delete-btn':
-        flash("Deleted Contact!")
-        return redirect("/contacts", 303)
-    else:
-        return ""
-=======
+    flash("Deleted Contact!")
     return render_to_response("hv/deleted.xml")
->>>>>>> 9d2834b (implement HV app with minimal Flask changes)
 
 
 @app.route("/contacts/", methods=["DELETE"])
