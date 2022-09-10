@@ -32,7 +32,7 @@ def contacts():
     page = int(request.args.get("page", 1))
     rows_only = request.args.get("rows_only") == "true"
     if search:
-        contacts_set = Contact.search(search)
+        contacts_set = Contact.search(search, page)
     else:
         contacts_set = Contact.all(page)
 

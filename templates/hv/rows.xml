@@ -13,4 +13,16 @@
       </text>
     </item>
   {% endfor %}
+  {% if contacts|length %}
+    <item key="load-more" id="load-more" style="load-more-item">
+      <behavior
+        trigger="visible"
+        action="replace"
+        target="load-more"
+        href="/contacts?rows_only=true&page={{ page + 1 }}"
+        verb="get"
+      />
+      <spinner />
+    </item>
+  {% endif %}
 </items>

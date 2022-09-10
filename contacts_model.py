@@ -63,18 +63,22 @@ class Contact:
 
     @classmethod
     def all(cls, page=1):
-        page = int(page)
-        start = (page - 1) * PAGE_SIZE
-        end = start + PAGE_SIZE
-        return list(cls.db.values())[start:end]
+        return cls.paginate(list(cls.db.values()), page)
 
     @classmethod
-    def search(cls, text):
+    def search(cls, text, page=1):
         result = []
         for c in cls.db.values():
             if text in c.first or text in c.last or text in c.email or text in c.phone:
                 result.append(c)
-        return result
+        return cls.paginate(result, page)
+
+    @classmethod
+    def paginate(cls, results, page):
+        page = int(page)
+        start = (page - 1) * PAGE_SIZE
+        end = start + PAGE_SIZE
+        return results[start:end]
 
     @classmethod
     def load_db(cls):
