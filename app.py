@@ -66,6 +66,7 @@ def reset_archive():
     return render_template("archive_ui.html", archiver=archiver)
 
 
+
 @app.route("/contacts/count")
 def contacts_count():
     count = Contact.count()
