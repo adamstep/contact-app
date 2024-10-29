@@ -4,111 +4,79 @@
     "first": "Carson",
     "last": "Gross",
     "phone": "123-456-7890",
-    "email": "carson@example.comz",
+    "email": "carson@example.com",
     "errors": {}
   },
   {
     "id": 3,
-    "first": "",
-    "last": "",
+    "first": "Jack",
+    "last": "Preston",
     "phone": "",
-    "email": "joe@example2.com",
+    "email": "jack@example.com",
     "errors": {}
   },
   {
     "id": 5,
-    "first": "Joe",
-    "last": "Blow",
+    "first": "Brian",
+    "last": "Doe",
     "phone": "123-456-7890",
-    "email": "joe@example.com",
-    "errors": {}
-  },
-  {
-    "id": 6,
-    "first": "Joe",
-    "last": "Blow",
-    "phone": "123-456-7890",
-    "email": "joe1@example.com",
+    "email": "brian@example.com",
     "errors": {}
   },
   {
     "id": 7,
-    "first": "Joe",
-    "last": "Blow",
+    "first": "Jane",
+    "last": "Reed",
     "phone": "123-456-7890",
-    "email": "joe2@example.com",
+    "email": "jane@example.com",
     "errors": {}
   },
   {
     "id": 8,
-    "first": "Joe",
-    "last": "Blow",
+    "first": "Christine",
+    "last": "Porter",
     "phone": "123-456-7890",
-    "email": "joe3@example.com",
-    "errors": {}
-  },
-  {
-    "id": 9,
-    "first": "Joe",
-    "last": "Blow",
-    "phone": "123-456-7890",
-    "email": "joe4@example.com",
+    "email": "christine@example.com",
     "errors": {}
   },
   {
     "id": 10,
-    "first": "Joe",
-    "last": "Blow",
+    "first": "Florence",
+    "last": "Rogers",
     "phone": "123-456-7890",
-    "email": "joe5@example.com",
-    "errors": {}
-  },
-  {
-    "id": 11,
-    "first": "Joe",
-    "last": "Blow",
-    "phone": "123-456-7890",
-    "email": "joe6@example.com",
-    "errors": {}
-  },
-  {
-    "id": 12,
-    "first": "Joe",
-    "last": "Blow",
-    "phone": "123-456-7890",
-    "email": "joe7@example.com",
+    "email": "florence@example.com",
     "errors": {}
   },
   {
     "id": 13,
-    "first": "Joe",
-    "last": "Blow",
+    "first": "Abhishek",
+    "last": "Kumar",
     "phone": "123-456-7890",
-    "email": "joe8@example.com",
+    "email": "abhishek@example.com",
     "errors": {}
   },
   {
     "id": 14,
-    "first": "Joe",
-    "last": "Blow",
+    "first": "Nadia",
+    "last": "Rodriguez",
     "phone": "123-456-7890",
-    "email": "joe9@example.com",
+    "email": "nadia@example.com",
     "errors": {}
   },
   {
     "id": 15,
-    "first": "Joe",
-    "last": "Blow",
+    "first": "Adam",
+    "last": "Stevens",
     "phone": "123-456-7890",
-    "email": "joe10@example.com",
+    "email": "adam@example.com",
     "errors": {}
   },
   {
     "id": 16,
-    "first": "Joe",
-    "last": "Blow",
+    "first": "Delia",
+    "last": "Khan",
     "phone": "123-456-7890",
-    "email": "joe11@example.com",
+    "email": "delia@example.com",
     "errors": {}
   },
   {
@@ -117,22 +85,6 @@
     "last": "Blow",
     "phone": "123-456-7890",
     "email": "joe12@example.com",
-    "errors": {}
-  },
-  {
-    "id": 18,
-    "first": null,
-    "last": null,
-    "phone": null,
-    "email": "restexample1@example.com",
-    "errors": {}
-  },
-  {
-    "id": 19,
-    "first": null,
-    "last": null,
-    "phone": null,
-    "email": "restexample2@example.com",
     "errors": {}
   }
 ]
