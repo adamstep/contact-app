@@ -524,22 +524,22 @@ edit:
 
 delete:
 ```
+            <behavior
+              xmlns:alert="https://hyperview.org/hyperview-alert"
+              trigger="press"
+              action="alert"
+              alert:title="Confirm delete"
+              alert:message="Are you sure you want to delete {{ contact.first }}?"
+            >
+              <alert:option alert:label="Confirm">
                 <behavior
-                  xmlns:alert="https://hyperview.org/hyperview-alert"
                   trigger="press"
-                  action="alert"
-                  alert:title="Confirm delete"
-                  alert:message="Are you sure you want to delete {{ contact.first }}?"
-                >
-                  <alert:option alert:label="Confirm">
-                    <behavior
-                      trigger="press"
-                      action="append"
-                      target="item-{{ contact.id }}"
-                      href="/contacts/{{ contact.id }}/delete"
-                      verb="post"
-                    />
-                  </alert:option>
-                  <alert:option alert:label="Cancel" />
-                </behavior>
+                  action="append"
+                  target="item-{{ contact.id }}"
+                  href="/contacts/{{ contact.id }}/delete"
+                  verb="post"
+                />
+              </alert:option>
+              <alert:option alert:label="Cancel" />
+            </behavior>
 ```
