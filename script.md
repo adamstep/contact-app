@@ -91,7 +91,6 @@ templates/hv/rows.xml
 <items xmlns="https://hyperview.org/hyperview">
   {% for contact in contacts %}
     <item key="{{ contact.id }}" style="contact-item">
-      <behavior trigger="press" action="push" href="/contacts/{{ contact.id }}" />
       <text style="contact-item-label">
         {% if contact.first %}
           {{ contact.first }} {{ contact.last }}
@@ -137,27 +136,7 @@ open/close `<text-field></text-field>`
     action="replace-inner"
     target="contacts-list"
     href="/contacts?rows_only=true"
-    verb="get"
 />
-```
-
-
-# Infinite scroll
-
-templates/hv/rows.xml
-
-```
-  {% if contacts|length > 0 %}
-    <item key="load-more" id="load-more" style="load-more-item">
-      <behavior
-        trigger="visible"
-        action="replace"
-        target="load-more"
-        href="/contacts?rows_only=true&page={{ page + 1 }}"
-        verb="get" />
-      <spinner />
-    </item>
-  {% endif %}
 ```
 
 
@@ -165,8 +144,9 @@ templates/hv/rows.xml
 
 hv/index.xml
 
+in <list>
 ```
-<list id="contacts-list" trigger="refresh" action="replace-inner" target="contacts-list" href="/contacts?rows_only=true">
+trigger="refresh" action="replace-inner" target="contacts-list" href="/contacts?rows_only=true"
 ```
 
 # Viewing details
@@ -329,22 +309,19 @@ form_field.xml
 ```
 
 ```
-  {% if saved %}
     <behavior trigger="load" once="true" action="dispatch-event" event-name="contact-updated" />
-    <behavior trigger="load" once="true" action="reload" href="/contacts/{{contact.id}}" />
-  {% endif %}
 ```
 
 hx/index.xml, in form. Reload app after
 
 ```
-  <behavior
-    trigger="on-event"
-    event-name="contact-updated"
-    action="replace-inner"
-    target="contacts-list"
-    href="/contacts?rows_only=true"
-  />
+    <behavior
+      trigger="on-event"
+      event-name="contact-updated"
+      action="replace-inner"
+      target="contacts-list"
+      href="/contacts?rows_only=true"
+    />
 ```
 
 
@@ -353,23 +330,23 @@ hx/index.xml, in form. Reload app after
 hv/edit.xml
 
 ```
-<view style="button">
-  <behavior
-    trigger="press"
-    action="append"
-    target="form-fields"
-    href="/contacts/{{contact.id}}/delete"
-    verb="post"
-  />
-  <text style="button-label button-label-delete">Delete Contact</text>
-</view>
+  <view style="button">
+    <behavior
+      trigger="press"
+      action="append"
+      target="form-fields"
+      href="/contacts/{{contact.id}}/delete"
+      verb="post"
+    />
+    <text style="button-label button-label-delete">Delete Contact</text>
+  </view>
 ```
 
 
 hv/deleted.xml
 
 ```
-<view>
+<view xmlns="https://hyperview.org/hyperview">
   <behavior trigger="load" action="dispatch-event" event-name="contact-updated" />
   <behavior trigger="load" action="back" />
 </view>
@@ -489,10 +466,9 @@ hv/messages.xml
 {% endfor %}
 ```
 
-hv/form_fields.xml
+hv/form_fields.xml, after `{% if saved %}`
 ```
-{% if saved %}
-    {% include "hv/messages.xml" %}
+  {% include "hv/messages.xml" %}
 ```
 
 hv/deleted.xml
