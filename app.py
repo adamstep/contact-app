@@ -11,6 +11,7 @@ Contact.load_db()
 # ========================================================
 
 app = Flask(__name__)
+app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 app.secret_key = b'hypermedia rocks'
 
